@@ -21,6 +21,7 @@ dist-ssr/
 # Go Backend
 # =========================
 # Binaries
+backend/build/
 bin/
 *.exe
 *.exe~
@@ -45,7 +46,6 @@ go.work.sum
 # Project-specific
 # =========================
 data/
-server
 whatsgo
 
 # =========================
@@ -60,3 +60,8 @@ whatsgo
 *.njsproj
 *.sln
 *.sw?
+
+# =========================
+# Docker / Production
+# =========================
+.env.production

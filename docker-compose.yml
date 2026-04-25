@@ -1,0 +1,50 @@
+services:
+  # ─── Go Backend ───────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: whatsgo-backend
+    restart: unless-stopped
+    env_file: .env.production
+    volumes:
+      - whatsgo_data:/app/data
+    networks:
+      - whatsgo-net
+    healthcheck:
+      test: ["CMD", "sh", "-c", "curl -fs http://localhost:8080/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+  # ─── Frontend (Nginx) ────────────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        - VITE_API_URL=${VITE_API_URL:-}
+    container_name: whatsgo-frontend
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-80}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - whatsgo-net
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget -qO- http://localhost:80/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      start_period: 5s
+      retries: 3
+
+volumes:
+  whatsgo_data:
+    driver: local
+
+networks:
+  whatsgo-net:
+    driver: bridge

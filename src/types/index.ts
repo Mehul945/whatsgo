@@ -1,4 +1,5 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const isProd = import.meta.env.PROD;
+export const API_BASE_URL = import.meta.env.VITE_API_URL || (isProd ? '' : 'http://localhost:8080');
 
 export interface ApiResponse<T> {
   success: boolean;

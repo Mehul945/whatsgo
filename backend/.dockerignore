@@ -1,0 +1,8 @@
+data/
+build/
+a.out
+*.exe
+*.dll
+*.so
+*.dylib
+.env
