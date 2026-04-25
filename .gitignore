@@ -1,0 +1,62 @@
+# =========================
+# Logs
+# =========================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# =========================
+# Node / Frontend
+# =========================
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# =========================
+# Go Backend
+# =========================
+# Binaries
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Coverage
+*.out
+
+# Vendor (optional, remove if you commit vendor/)
+vendor/
+
+# Go workspace / env
+go.work
+go.work.sum
+
+# =========================
+# Project-specific
+# =========================
+data/
+server
+whatsgo
+
+# =========================
+# Editor / OS files
+# =========================
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
