@@ -3,4 +3,4 @@ dist/
 .git/
 *.log
 .env
-.env.*
+backend/data/

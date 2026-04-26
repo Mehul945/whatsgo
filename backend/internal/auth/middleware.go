@@ -150,10 +150,24 @@ func RateLimitMiddleware(database *db.DB, defaultRPM int) gin.HandlerFunc {
 			userID.(int), windowStart,
 		).Scan(&requests)
 		if err != nil {
-			_, _ = database.Exec(
-				"INSERT OR REPLACE INTO rate_limits (user_id, requests, window_start) VALUES (?, 1, ?)",
-				userID.(int), windowStart,
-			)
+			// Row doesn't exist yet – upsert with driver-appropriate syntax
+			switch database.Driver {
+			case "postgres":
+				_, _ = database.Exec(
+					"INSERT INTO rate_limits (user_id, requests, window_start) VALUES (?, 1, ?) ON CONFLICT (user_id) DO UPDATE SET requests = 1, window_start = ?",
+					userID.(int), windowStart, windowStart,
+				)
+			case "mysql":
+				_, _ = database.Exec(
+					"INSERT INTO rate_limits (user_id, requests, window_start) VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE requests = 1, window_start = VALUES(window_start)",
+					userID.(int), windowStart,
+				)
+			default: // sqlite3
+				_, _ = database.Exec(
+					"INSERT OR REPLACE INTO rate_limits (user_id, requests, window_start) VALUES (?, 1, ?)",
+					userID.(int), windowStart,
+				)
+			}
 			c.Next()
 			return
 		}

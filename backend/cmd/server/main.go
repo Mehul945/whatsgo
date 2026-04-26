@@ -79,6 +79,7 @@ func main() {
 	api.RegisterUserRoutes(r, database)
 	api.RegisterAdminRoutes(r, database)
 	api.RegisterMetaRoutes(r, database, manager)
+	api.RegisterMetaWebhookRoutes(r, database, manager)
 
 	// Static files - serve frontend build
 	webDir := filepath.Join(cfg.DataDir, "..", "web", "dist")
